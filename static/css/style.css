@@ -117,7 +117,8 @@ body {
     padding-inline-start: 2px;
 }
 .custom-marker {
-    background-color: #1e9176;
+/*     background-color: #1e9176; */
+    background-color: #33DFA1;
     border-radius: 50%;
     color: #000000;
     text-align: center;
