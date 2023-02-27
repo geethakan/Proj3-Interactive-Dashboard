@@ -1,8 +1,8 @@
-<div><img align=left width=200px height=120px src="https://github.com/geethakan/proj2-ETL-foodinspection/blob/main/Images/inspections.jpg">
+<img align=left src="https://github.com/geethakan/Proj3-Interactive-Dashboard/blob/main/static/images/logoandtext.png">
   
-# Storytelling thru Data Visualization - TripAdvisor Travellers' Choice Interactive Dashboard
+# Storytelling thru Data Visualization
   
-This is a group project aimed to utilize many different skillsets for an interactive dashboard. </div>
+This is a group project aimed to utilize many different skillsets for an interactive dashboard. 
 
 
 ## Contributors
@@ -11,72 +11,68 @@ This is a group project aimed to utilize many different skillsets for an interac
 - Anjelica Hussar
 - Jasmine Huang
   
-  
-## DataSets
+## Languages Used
+* Python: Beautiful Soup, Pandas, SQL Alchemy
+* Javascript
+* HTML
+* CSS
+* PostgreSQL
 
-<div> Source: <a href="https://data.cityofchicago.org/Health-Human-Services/Food-Inspections/4ijn-s7e5" target="_blank">Chicago Data Portal - Food Inspections.</a> 
-Dataset #1 - Inspections of restaurants and food establishments in Chicago from January 2010 thru Jun 2018. Downloaded as csv. Dataset #2 - API call was used to
-get inspection details from Jul 2018 thru Jan 2023 in json format.</div>
+
+## ETL Process
+
+### 1. Source of data:
+
+Web scraping from [Tripadvisor's top 25 Traveler’s Choice Award ]( https://www.tripadvisor.com/TravelersChoice)
+
+The categories selected for scraping:
+* Destinations
+* Beaches
+* Hotels
+* Restaurants
+* Things to Do
+
+### 2. Web Scraping
+
+* BeautifulSoup used for web scrapping. First set of data scraped from category page for the top 25 of each category.
+* Results stored in csv
+* Review counts scraped for each item of the category using rating url from first dataset
+* Geoapify API call used to get the co-ordinates of the location
+
+### 3. Data Cleanup
+
+* Custom generated unique Id to identify each category item (Category + Rank).
+* Scraped numerical values converted from text to int or float
+* Missing values (Destination category missing reviews for 2022) substituted with zeros
+* Main dataset and review dataset merged into a single dataframe
+* Columns dropped (eg. RatingUrl) and columns rearranged
+
+### 4. Export the data to json and PostGreSQL
+
+* Individual categories saved a separate json files from merged dataframe for the category
+* All categories merged into a single dataframe and bulk inserted to PostgreSQL table using SQL Alchemy
+
+# Processing Data for Interactive Visualization
+
+* Dashboard with menu option to select category for viewing the data
+
+* Use Javascript to populate leaflet map for the category chosen with custom markers for locations
+
+* Use Plotly to create donut subplots to display the count of customer reviews (categorized as Excellent, Very Good, Average, Poor and Terrible)
+
+* Use d3.js to build list of images from the image url scraped
+
+* Cooperate with HTML and custom CSS to finish our dashbaord
 
 
-  
-  | Column Name   | Type    | Description              |
-  | ------------- | ------- | ------------------------ |
-  | Inspection Id | Int     | Unique Id per inspection 
-  | DBA Name      | String  | Business Name            
-  | AKA Name      | String  | Also Known As Name
-  | License #     | Integer | License number for Business
-  | Facility Type | String  | Business Type
-  | Risk          | String  | Risk# and Category
-  | Address       | String  | Strett address
-  | City          | String  | City
-  | State         | String  | 2 alpha State
-  | Zip           | Int     | 5 digit zip
-  | Inspection Date | Date  | date in USA format
-  | Inspection Type | String | Nature of inspection
-  | Results         | String | Pass/Fail/Conditional
-  | Violations      | String | Violation number followed by description followed by comments
-  | Latitude        | Float  | Latitude 
-  | Longitude       | Float  | Longitude
-  | Location        | String | Latitude and Longitude in dictionary format
+# Main Takeaways from this project
 
-## Extract
+* Planned for a visualization exercise covering many skillsets
 
-- We sourced our original data from the Chicago Data Portal. We extracted two different data sets containing food inspection instances in Chicago and surrounding areas. 
-- The first data set contains food inspection instances from 1/1/2010-6/30/2018, and the second data set contains instances from 7/1/2018-Present.
-- Both sets have the same keys, and the reason a new set was created after 7/1/2018 was because the definitions of violations changed.
-- We extracted the first data set, Food Inspections- 1/1/2010-6/30/2018, as a CSV file. This source contained most of the data, with 173k food inspection instances.
-- The second data set, Food Inspections- 7/1/2018-Present was extracted as a JSON file using an API call.
-- The url= (https://data.cityofchicago.org/resource/qizy-d2wf.json) we used for the API call. 
-- Using the data in the JSON file, we created a column heading list as well as an empty list to hold all data rows. Using a for loop we extracted our desired values and appended them to the list we created.
-- From here, we created a data frame using the extracted rows and column header list.
+* ETL covering web scraping, API, data wrangling and handling multiple formats of data (csv, json, SQL)
 
-## Transform
+* Beautiful visualization from dashboard using javascript libraries d3, leaflet and Plotly subplots
 
-- Reviewing the food inspection data set, we chose "inspection_id" as the primary key due to the unique values across both data sets. 
-- Right away we dropped 3 columns, "Latitude", "Longitude", and "Location". These keys did not contain relevant values to our desired data set as all 3 columns contained coordinates for their respected business.
-- We renamed all the remaining columns in our CSV file to lower case with under-scores in place of spaces. We did this to ensure proper loading into PostgreSQL. 
-- We loaded both datasets into pandas DataFrames and combined DataFrames into one single source.
-- We changed "inspection_id", "license_id", and "zip" from float to integer. 
-- We also changed "inspection_date" to datetime. JSON and CSV had different formats for their dates, so we had to change the format to match. 
-- To clarify the "risk" column, we split the values in the column into 3 separate columns.
-- The first column contained just the string value "Risk", which we deemed unnecessary and dropped the column. The second column contains the risk rank as an integer from 1-3, given in the original data set. The third column contains the level of risk from low-high, and we removed the parentheses enclosing the levels from the original column.
-- Some risk values were blank; for these we added a value of "0". 
-- We investigated the "results" column containing the outcome of each instance. Some rows were labeled "Out of Business". We dropped these rows as they serve no relevance due to their forced closure. 
-- The original data set warns that there may have been duplicate values. To clean this, we found duplicate "inspection_id" values and dropped those.
-- For purposes of this project, we dropped the "violations" column as the values of this column were too large to fit the database. In a real-world situation, this column would be imperative for analysis.
+* Web rendering using custom HTML and css
 
-## Load
-
-- We loaded our final data into a relational database for storage.
-- We created a connection to PostgreSQL and used this to create a sqlalchemy engine.
-- From here, we loaded our dataframe to SQL by doing a bulk insert into a PostgreSQL database table.
-- We used SQL in PostgreSQL to create the table. 
-- Finally, we commited our changes and closed the session. 
-
-## Topic Chosen
-
-- Given the timeframe and project requirements, we decided these data sets had the potential to meet the ETL requirements for this project.
-## API Call Limitations
-
-- The API call has a limitation of the number of records that can be extracted, therefore we only used this data as a way to illustrate for the purposes of this class how to combine two datasets together.
+<img align=left src="https://github.com/geethakan/Proj3-Interactive-Dashboard/blob/main/static/images/logoandtext.png">
