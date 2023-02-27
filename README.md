@@ -75,4 +75,4 @@ The categories selected for scraping:
 
 * Web rendering using custom HTML and css
 
-<img align=left src="https://github.com/geethakan/Proj3-Interactive-Dashboard/blob/main/static/images/logoandtext.png">
+<img align=left src="https://github.com/geethakan/Proj3-Interactive-Dashboard/blob/main/static/images/dashboard.png">
