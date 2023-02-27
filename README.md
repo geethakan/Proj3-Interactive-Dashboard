@@ -1,16 +1,15 @@
 <div><img align=left width=200px height=120px src="https://github.com/geethakan/proj2-ETL-foodinspection/blob/main/Images/inspections.jpg">
   
-# ETL Mini Project - Food Inspections
+# Storytelling thru Data Visualization - TripAdvisor Travellers' Choice Interactive Dashboard
   
-This is a mini project done as a group and purposed to practice teamwork and collaborativeVio;a problem-solving. Timeframe was very limited and division of labor made it possible to accomplish the task.</div>
+This is a group project aimed to utilize many different skillsets for an interactive dashboard. </div>
 
 
 ## Contributors
   
-- Heather Robson
-- Enrique Bouche
-- Camille Jensen
 - Geetha Kandukuri
+- Anjelica Hussar
+- Jasmine Huang
   
   
 ## DataSets
